@@ -50,5 +50,8 @@
     "webpack": "3.0.0",
     "webpack-dev-server": "2.5.0",
     "write-file-webpack-plugin": "4.1.0"
+  },
+  "engines": {
+    "node": "6.10.0"
   }
 }
