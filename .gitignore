@@ -1,0 +1,9 @@
+node_modules/
+
+!.gitignore
+
+src/**/*.js
+src/**/*.js.map
+test/**/*.js
+test/**/*.js.map
+dist/bundle.js*

@@ -1,0 +1,23 @@
+{
+    "extends": "tslint:recommended",
+    "defaultSeverity": "warning",
+    "rules": {
+        "trailing-comma": [
+            false
+        ],
+        "max-classes-per-file": [
+            false
+        ],
+        "member-ordering": [
+            false
+        ],
+        "object-literal-sort-keys": false,
+        "no-reference": false, // Monaco editor has funky typedefs.
+        "array-type": [
+            false
+        ],
+        "max-line-length": [
+            false
+        ]
+    }
+}
