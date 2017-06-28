@@ -1,4 +1,4 @@
-var webpack = require("webpack");
+var path = require("path");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -6,15 +6,15 @@ module.exports = {
     output: {
         filename: "./dist/bundle.js",
     },
-
-    // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
-
+    devtool: process.env.NODE_ENV === "production" ? undefined : "source-map",
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        host: "0.0.0.0",
+        port: 4321
+    },
     resolve: {
-        // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
-
     module: {
         rules: [
             {
