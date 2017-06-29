@@ -3,6 +3,7 @@ type ConsumeProduceFormat = "application/json" | "text/json";
 type SwaggerActionParameterType = "string" | "number";
 type SwaggerActionParameterFormat = "date-time" | "number";
 type SwaggerActionResponseDataType = "string" | "number" | "array" | "object";
+type SwaggerAdditionalPropertyTypes = "integer" | "string";
 
 interface ISwaggerActionParameter {
     name: string;
@@ -13,7 +14,7 @@ interface ISwaggerActionParameter {
     format?: SwaggerActionParameterFormat;
 }
 
-interface ISwaggerDefinitionProperty {
+export interface ISwaggerDefinitionProperty {
     description: string;
     type: SwaggerActionResponseDataType;
     items?: {
@@ -21,12 +22,59 @@ interface ISwaggerDefinitionProperty {
     };
 }
 
-interface ISwaggerDefinition {
-    description: string;
+export interface ISwaggerDefinitionReference {
+    type?: undefined;
+    $ref: string;
+}
+
+interface ISwaggerSchemaObjectType {
     type: "object";
-    properties: {
-        [name: string]: ISwaggerDefinitionProperty;
+    additionalProperties?: {
+        type: SwaggerAdditionalPropertyTypes
     };
+    properties?: {
+        [name: string]: ISwaggerSchemaValueTypeOrReference;
+    };
+}
+
+interface ISwaggerSchemaArrayType {
+    type: "array";
+    items: ISwaggerSchemaValueTypeOrReference;
+}
+
+interface ISwaggerSchemaStringType {
+    type: "string";
+    format?: "byte" | "binary" | "date" | "date-time" | "password";
+}
+
+interface ISwaggerSchemaIntegerType {
+    type: "integer";
+    format: "int32" | "int64";
+}
+
+interface ISwaggerSchemaNumberType {
+    type: "number";
+    format: "float" | "double";
+}
+
+interface ISwaggerSchemaBooleanType {
+    type: "boolean";
+}
+
+export type ISwaggerSchemaValueType = ISwaggerSchemaObjectType | ISwaggerSchemaArrayType | ISwaggerSchemaStringType | ISwaggerSchemaIntegerType | ISwaggerSchemaNumberType;
+
+export type ISwaggerSchemaValueTypeOrReference = ISwaggerSchemaValueType | ISwaggerDefinitionReference;
+
+export interface ISwaggerDefinitions {
+    [name: string]: ISwaggerDefinition;
+}
+
+export interface ISwaggerDefinition {
+    description?: string;
+    properties?: {
+        [name: string]: ISwaggerSchemaValueTypeOrReference;
+    };
+    allOf?: ISwaggerSchemaValueTypeOrReference[];
 }
 
 export interface ISwaggerPathDefinition {
@@ -36,15 +84,10 @@ export interface ISwaggerPathDefinition {
         operationId: string;
         consumes: ConsumeProduceFormat[];
         produces: ConsumeProduceFormat[];
-        responses: {
+        responses: { // http://swagger.io/specification/#responsesObject
             [status: number]: {
                 description: "string";
-                schema: {
-                    type: SwaggerActionResponseDataType,
-                    items: {
-                        type: SwaggerActionResponseDataType;
-                    };
-                };
+                schema?: ISwaggerSchemaValueTypeOrReference
             };
         };
         parameters: ISwaggerActionParameter[];
@@ -64,9 +107,5 @@ export interface ISwaggerResponse {
     paths: {
         [subUrl: string]: ISwaggerPathDefinition;
     };
-    definitions: {
-        [name: string]: {
-
-        };
-    };
+    definitions: ISwaggerDefinitions;
 }

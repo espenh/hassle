@@ -6,12 +6,16 @@ import * as React from "react";
 import { IEditorParams } from "../contracts";
 
 import * as defReact from "!!raw-loader!@types/react/index.d.ts";
+import * as highcharts from "!!raw-loader!@types/highcharts/index.d.ts";
+import TypeManager from "../typegeneration/typeManager";
 
 export class MonacoEditor extends React.Component<IEditorParams, {}> {
     private editor: monaco.editor.IStandaloneCodeEditor;
     private editorElement: HTMLDivElement;
     private initWork: Promise<{}>;
+
     private loadedLibs: { dispose: () => void }[] = [];
+    private hassleGeneratedTypeLibe: { dispose(): void } | undefined;
 
     public render(): JSX.Element {
         return <div className="monaco-editor" ref={(element: HTMLDivElement) => { this.editorElement = element; }}></div >;
@@ -26,7 +30,7 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                 if (this.props.language === "typescript") {
                     // TODO - Do this once. Could have multiple ts editors.
                     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-                        target: monaco.languages.typescript.ScriptTarget.ES2016,
+                        target: monaco.languages.typescript.ScriptTarget.ES2015,
                         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
                         module: monaco.languages.typescript.ModuleKind.CommonJS,
                         jsx: monaco.languages.typescript.JsxEmit.React,
@@ -40,6 +44,7 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                     // Add known types.
                     try {
                         this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defReact as any, "node_modules/@types/react/index.d.ts"));
+                        this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(highcharts as any, "node_modules/@types/highcharts/index.d.ts"));
                     } catch (err) {
                         // TODO - We get an error if we add libs multiple times. Figure out how to clear the typescriptDefaults.
                     }
@@ -49,9 +54,18 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                         model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx"))
                     });
 
+                    const typeManager = new TypeManager(() => { });
+
                     const generateTypesForCurrentEditor = async () => {
-                        // const code = await this.getEditorText();
-                        // handler.processCode(code);
+                        const code = await this.getEditorText();
+                        const generatedCode = await typeManager.processCode(code);
+
+                        if (this.hassleGeneratedTypeLibe) {
+                            this.hassleGeneratedTypeLibe.dispose();
+                            this.hassleGeneratedTypeLibe = undefined;
+                        }
+
+                        this.hassleGeneratedTypeLibe = monaco.languages.typescript.typescriptDefaults.addExtraLib(generatedCode, "hassleGeneratedTypes.d.ts");
                     };
 
                     // Wire up change handling.
@@ -90,6 +104,12 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
     public componentWillUnmount() {
         this.loadedLibs.forEach((lib) => lib.dispose());
         this.loadedLibs = [];
+
+        if (this.hassleGeneratedTypeLibe) {
+            this.hassleGeneratedTypeLibe.dispose();
+            this.hassleGeneratedTypeLibe = undefined;
+        }
+
         this.editor.getModel().dispose();
         this.editor.dispose();
     }

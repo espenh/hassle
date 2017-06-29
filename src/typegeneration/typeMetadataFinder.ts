@@ -1,27 +1,6 @@
 import * as _ from "lodash";
 import { ISwaggerResponse } from "./swagger";
 
-interface IResponseField {
-    name: string;
-    type: "string" | "number" | "string[]" | "number[]";
-}
-
-/*
-interface IResponseWithFields {
-    type: "fields";
-    fields: IResponseField[];
-}
-
-interface IResponseWithArray {
-    type: "array";
-}*/
-
-interface IResponseDataType {
-    url: string;
-    name: string;
-    data?: IResponseField[];
-}
-
 class UrlUtils {
     public static get(url: string) {
         const urlObject = new URL(url);
@@ -70,7 +49,10 @@ class MetadataRepository {
             urlPathToMatch = urlPathToMatch.substring(metadataForHost.basePath.length);
         }
 
-        return metadataForHost.paths[urlPathToMatch] || null;
+        return {
+            pathDefinition: metadataForHost.paths[urlPathToMatch] || null,
+            definitions: metadataForHost.definitions
+        };
     }
 }
 
@@ -96,7 +78,7 @@ export default class TypeMetadataFinder {
 
     public findAllUrlStrings(code: string): string[] {
 
-        const stringFinder = /(["'])(?:(?=(\\?))\2.)*?\1/g;
+        const stringFinder = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
 
         const allStringsWithQuotes: string[] = [];
         code.replace(stringFinder, (a, b, c, d) => {
@@ -157,21 +139,6 @@ export default class TypeMetadataFinder {
                         url,
                         metadata: metadata || null
                     };
-
-                    /*const paths = Object.keys(data.paths);
-                    const origin = new URL(url).origin;
-
-                    const pathsWithMetaInfo = paths.map((path) => {
-                        const fullUrl = `${origin}${path}`; // Swagger includes slashes in the path.
-                        const getResponse = data.paths[path]["get"];
-                        const successResponse = getResponse.responses[200];
-                        return {
-                            inputUrl: url,
-                            url: fullUrl
-                        };
-                    });
-
-                    return pathsWithMetaInfo;*/
                 }
 
                 return {
