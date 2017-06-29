@@ -1,14 +1,17 @@
 var path = require("path");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+var outputPath = path.join(__dirname, "dist");
+
 module.exports = {
     entry: "./src/clientStartup.tsx",
     output: {
-        filename: "./dist/bundle.js",
+        filename: "bundle.js",
+        path: outputPath
     },
     devtool: process.env.NODE_ENV === "production" ? undefined : "source-map",
     devServer: {
-        contentBase: path.join(__dirname, "dist"),
+        contentBase: outputPath,
         host: "0.0.0.0",
         port: 4321
     },
