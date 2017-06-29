@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { flatten } from "lodash";
-import { Fetcher } from "../src/Fetcher";
+import TypeMetadataFinder from "../src/typegeneration/typeMetadataFinder";
 
-describe("Fetcher", () => {
+describe("TypeMetadataFinder", () => {
 
     const validProtocols = ["http", "https"];
     const validUrls = [
@@ -27,7 +27,7 @@ describe("Fetcher", () => {
 
     describe("Url scraping", () => {
 
-        const fetcher = new Fetcher();
+        const fetcher = new TypeMetadataFinder();
 
         it("should return all valid urls", () => {
             const urlsToTest = getUrls(validProtocols, validUrls);
@@ -47,7 +47,7 @@ describe("Fetcher", () => {
     });
 
     describe("Finding metadata urls", () => {
-        const fetcher = new Fetcher();
+        const fetcher = new TypeMetadataFinder();
 
         it("should find swagger link for petstore", () => {
             const link = "http://petstore.swagger.io/v2/store/inventory";
