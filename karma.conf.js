@@ -31,13 +31,15 @@ module.exports = function (config) {
     preprocessors: {
       "test/**/*.ts": ["webpack"] // Using karma-webpack npm module
     },
+    mime: {
+      'text/x-typescript': ['ts', 'tsx']
+    },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    //reporters: ['mocha'],
-    reporters: ['progress'],
+    reporters: ['mocha'],
 
 
     // web server port
@@ -59,8 +61,7 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
-
+    browsers: ['ChromeCanaryHeadless'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
@@ -79,12 +80,6 @@ module.exports = function (config) {
     webpack: {
       module: webpackConfig.module,
       resolve: webpackConfig.resolve
-    },
-    customLaunchers: {
-      MyHeadlessChrome: {
-        base: 'ChromeHeadless',
-        flags: ['--headless', '--disable-translate', '--disable-extensions', '--remote-debugging-port=9222']
-      }
     }
   })
 }
