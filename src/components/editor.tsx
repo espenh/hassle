@@ -5,8 +5,12 @@ import { debounce } from "lodash";
 import * as React from "react";
 import { IEditorParams } from "../contracts";
 
+// TODO - We're adding some declarations here even if the scripts are (probably) not loaded.
+// Could have an import screen where users could add scripts they want loaded (highcharts, react, lodash, jquery etc.)
+// and have d.ts files paired with those libraries.
+import * as defHighcharts from "!!raw-loader!@types/highcharts/index.d.ts";
 import * as defReact from "!!raw-loader!@types/react/index.d.ts";
-import * as highcharts from "!!raw-loader!@types/highcharts/index.d.ts";
+
 import TypeManager from "../typegeneration/typeManager";
 
 export class MonacoEditor extends React.Component<IEditorParams, {}> {
@@ -41,20 +45,16 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                         noImplicitAny: true
                     });
 
-                    // Add known types.
-                    try {
-                        this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defReact as any, "node_modules/@types/react/index.d.ts"));
-                        this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(highcharts as any, "node_modules/@types/highcharts/index.d.ts"));
-                    } catch (err) {
-                        // TODO - We get an error if we add libs multiple times. Figure out how to clear the typescriptDefaults.
-                    }
+                    // Add some known types.
+                    this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defReact as any, "node_modules/@types/react/index.d.ts"));
+                    this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defHighcharts as any, "node_modules/@types/highcharts/index.d.ts"));
 
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         theme: "vs-dark",
                         model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx"))
                     });
 
-                    const typeManager = new TypeManager(() => { });
+                    const typeManager = new TypeManager();
 
                     const generateTypesForCurrentEditor = async () => {
                         const code = await this.getEditorText();

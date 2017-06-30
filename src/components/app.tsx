@@ -216,10 +216,37 @@ export default class HassleApp extends React.Component<{}, IHassleAppState> {
         const optionsFrameProps = {};
 
         if (!defaultCode) {
+            // TODO - Import these from a folder of sample files.
             defaultCode = {
-                typescript: "const ts = true;",
-                css: "body {background-color: ivory; }",
-                html: "<div>hello<b>world!</b></div>"
+                typescript: `const container = document.querySelector("div.container") as HTMLDivElement;
+
+document.querySelector("button").addEventListener("click", () => {
+    const newDiv = document.createElement("div");
+    newDiv.classList.add("box");
+    newDiv.style.backgroundColor = getRandomColor();
+
+    container.appendChild(newDiv);
+});
+
+const getRandomColor = () => {
+    const getRandomInteger = () => Math.round(Math.random() * 255);
+    return \`rgb(\${getRandomInteger()},\${getRandomInteger()},\${getRandomInteger()})\`;
+};
+                `,
+                css: `div.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.box {
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+}`,
+                html: `<button>Add</button>
+
+<div class="container">
+</div>`
             };
         }
 

@@ -6,7 +6,7 @@ export default class TypeManager {
 
     private fetcher: TypeMetadataFinder;
 
-    constructor(private newTypeDefinitionHandler: (typeDefinitions: string) => void) {
+    constructor() {
         this.fetcher = new TypeMetadataFinder();
     }
 
