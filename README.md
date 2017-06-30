@@ -1,6 +1,15 @@
 # Hassle
 TypeScript playground with in-editor type generation for Swagger-enabled endpoints.
 
+## Examples
+[https://hassle.azurewebsites.net/#husky](https://hassle.azurewebsites.net/#husky)
+
+[https://hassle.azurewebsites.net/#fireworks (click the square)](https://hassle.azurewebsites.net/#fireworks)
+
+[https://hassle.azurewebsites.net/#water](https://hassle.azurewebsites.net/#water)
+
+[https://hassle.azurewebsites.net/#minecraft](https://hassle.azurewebsites.net/#minecraft)
+
 ## Sample
 ```javascript
 const response = await fetch("http://petstore.swagger.io/v2/store/inventory");
