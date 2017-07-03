@@ -39,7 +39,7 @@ class MetadataRepository {
         const urlParts = UrlUtils.get(url);
 
         const metadataForHost = _.values(this.knownMetadataSourceUrl).find((metadata) => metadata !== null && metadata.host === urlParts.host) as ISwaggerResponse | null;
-        if (metadataForHost === null) {
+        if (metadataForHost === undefined || metadataForHost === null) {
             return null;
         }
 
@@ -120,7 +120,7 @@ export default class TypeMetadataFinder {
     }
 
     public async getTypesForUrls(urls: string[]) {
-        const x = urls.map(async (url): Promise<{ url: string, metadata: ISwaggerResponse | null }> => {
+        const urlWork = urls.map(async (url): Promise<{ url: string, metadata: ISwaggerResponse | null }> => {
             try {
 
                 const isWork = url.toLowerCase().includes("energycorp.com");
@@ -152,9 +152,7 @@ export default class TypeMetadataFinder {
                 };
             }
         });
-        const y = await Promise.all(x);
-
-        return y;
+        return await Promise.all(urlWork);
     }
 
     private async findAndLoadAllMetadataForUrls(urls: string[]) {
