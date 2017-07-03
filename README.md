@@ -1,6 +1,10 @@
 # Hassle
 TypeScript playground with in-editor type generation for Swagger-enabled endpoints.
 
+![alt tag](https://github.com/espenh/hassle/blob/master/docs/screenshots/hassle_fireworks.gif)
+
+![alt tag](https://github.com/espenh/hassle/blob/master/docs/screenshots/hassle_water.png)
+
 ## Examples
 [https://hassle.azurewebsites.net/#husky](https://hassle.azurewebsites.net/#husky)
 
