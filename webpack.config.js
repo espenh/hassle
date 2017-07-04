@@ -37,20 +37,11 @@ module.exports = {
     },
     plugins: [
         new CopyWebpackPlugin([
+            // The monaco-editor is a bit tricky to import, so we use some manual copying to move the required files to the correct place.
             {
                 from: 'node_modules/monaco-editor/min/vs',
-                to: './dist/vs'
-            },
-            // We want monaco-editor to use a newer version of typescript.
-            {
-                from: 'typescript_update',
-                to: './dist/vs/language/typescript',
-                force: true
+                to: './vs'
             }
         ])
-    ]/*,
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    }*/
+    ]
 };

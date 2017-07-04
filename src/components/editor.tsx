@@ -51,7 +51,8 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
 
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         theme: "vs-dark",
-                        model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx"))
+                        model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx")),
+                        minimap: { enabled: false }
                     });
 
                     const typeManager = new TypeManager();
@@ -79,7 +80,8 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         value: this.props.value,
                         language: this.props.language,
-                        theme: "vs-dark"
+                        theme: "vs-dark",
+                        minimap: { enabled: false }
                     });
                 }
 
