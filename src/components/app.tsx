@@ -9,6 +9,9 @@ import { MonacoEditor } from "./editor";
 import { IOutputFrameProps, OutputFrame } from "./outputFrame";
 
 import { AppBar, CircularProgress, IconButton, IconMenu, MenuItem, Snackbar, } from "material-ui";
+import Divider from "material-ui/Divider";
+import CodeIcon from "material-ui/svg-icons/action/code";
+import SaveIcon from "material-ui/svg-icons/content/save";
 
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
@@ -104,13 +107,15 @@ export default class HassleApp extends React.Component<{}, IHassleAppState> {
                     }
                     targetOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "top" }}>
-                    <MenuItem primaryText="Save" disabled={this.state.isLoading} onClick={async () => {
+                    <MenuItem primaryText="Save" leftIcon={<SaveIcon />} disabled={this.state.isLoading} onClick={async () => {
                         this.setState({
                             saveDialog: {
                                 open: true
                             }
                         });
                     }} />
+                    <Divider />
+                    <MenuItem primaryText="GitHub" leftIcon={<CodeIcon />} target="_blank" href="https://github.com/espenh/hassle" />
                 </IconMenu>} />
             {this.state.isLoading && <CircularProgress style={{ position: "fixed", left: 0, right: 0, top: 0, bottom: 0, margin: "auto", zoom: 2, opacity: 0.5, zIndex: 1000000 }} />}
             <SaveDialog
@@ -243,7 +248,7 @@ div.box {
     height: 100px;
     margin: 5px;
 }`,
-                html: `<button>Add</button>
+                html: `<button>Click</button>
 
 <div class="container">
 </div>`
