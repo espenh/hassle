@@ -5,6 +5,7 @@ TypeScript playground with in-editor type generation for Swagger-enabled endpoin
 
 ![alt tag](https://github.com/espenh/hassle/blob/master/docs/screenshots/hassle_water.png)
 
+
 ## Examples
 [https://hassle.azurewebsites.net/#husky](https://hassle.azurewebsites.net/#husky)
 
@@ -14,14 +15,14 @@ TypeScript playground with in-editor type generation for Swagger-enabled endpoin
 
 [https://hassle.azurewebsites.net/#minecraft](https://hassle.azurewebsites.net/#minecraft)
 
-## Sample
-```javascript
-const response = await fetch("http://petstore.swagger.io/v2/store/inventory");
-const inventory = await response.json();
-// By parsing the swagger metadata, types have been injected into the editor model,
-// and 'inventory' is of type 'string[]', not 'any' as it would normally be.
-```
-```TODO - Add animation demonstrating intellisense in vscode.```
+
+## Type generation
+![alt tag](https://github.com/espenh/hassle/blob/master/docs/screenshots/hassle_swagger_typegen.png)
+
+Note how the standard ```fetch()``` and ```json()``` methods now return a typed object, enabling code completion and tooltips for previously unknown response types. This is done by resolving the swagger json schema and generating TypeScript type information for matching url. The trick is describing an overload for ```fetch()``` with a string literal type that is the matching url, and then having the overloaded return type use a typed response for the```json()``` method. 
+
+This could probably be taken further and used to enable typed parameters for POST requests, or different return types for different response codes etc.
+
 
 ## How to run
 Initial setup:
@@ -36,6 +37,7 @@ npm install
 npm run watch
 ```
 Navigate to http://localhost:4321.
+
 
 ### Build for production:
 ```
