@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import { defaults, each, flatten, map } from "lodash";
 
 import * as GoldenLayout from "golden-layout";
 import * as React from "react";
@@ -340,11 +340,11 @@ div.box {
             }]
         };
 
-        const configToUse = _.defaults(partialConfig, defaultConfig);
+        const configToUse = defaults(partialConfig, defaultConfig);
 
         const getConfigTypes = (item: { content?: GoldenLayout.ItemConfigType[] | undefined }): GoldenLayout.ItemConfigType[] => {
             if (item.content && item.content.length > 0) {
-                return _.flatten(_.map(item.content, (subItem) => getConfigTypes(subItem)));
+                return flatten(map(item.content, (subItem) => getConfigTypes(subItem)));
             }
 
             return [item as GoldenLayout.ItemConfigType];
@@ -358,7 +358,7 @@ div.box {
             output: outputFrameProps,
             options: optionsFrameProps
         };
-        _.each(allConfigs, (itemConfig: GoldenLayout.ReactComponentConfig) => {
+        each(allConfigs, (itemConfig: GoldenLayout.ReactComponentConfig) => {
             if (itemConfig.id && !(itemConfig.id instanceof Array)) {
                 if (propsForComponents.hasOwnProperty(itemConfig.id)) {
                     itemConfig.props = propsForComponents[itemConfig.id];
@@ -390,7 +390,7 @@ div.box {
         });
 
         (this.myLayout as any).on("stateChanged", () => {
-            _.each(resizeHandlers, (resizeHandler) => {
+            each(resizeHandlers, (resizeHandler) => {
                 resizeHandler();
             });
         });

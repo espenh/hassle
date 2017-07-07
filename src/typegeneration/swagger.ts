@@ -61,7 +61,7 @@ interface ISwaggerSchemaBooleanType {
     type: "boolean";
 }
 
-export type ISwaggerSchemaValueType = ISwaggerSchemaObjectType | ISwaggerSchemaArrayType | ISwaggerSchemaStringType | ISwaggerSchemaIntegerType | ISwaggerSchemaNumberType;
+export type ISwaggerSchemaValueType = ISwaggerSchemaObjectType | ISwaggerSchemaArrayType | ISwaggerSchemaStringType | ISwaggerSchemaIntegerType | ISwaggerSchemaNumberType | ISwaggerSchemaBooleanType;
 
 export type ISwaggerSchemaValueTypeOrReference = ISwaggerSchemaValueType | ISwaggerDefinitionReference;
 

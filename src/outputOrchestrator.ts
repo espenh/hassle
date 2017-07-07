@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import { debounce } from "lodash";
 
 import { OutputFrame } from "./components/outputFrame";
 import CompilerProxy from "./tsCompilerProxy";
@@ -29,7 +29,7 @@ export default class OutputOrchestrator {
         this.compiler = new CompilerProxy();
     }
 
-    private throttledUpdated = _.debounce(() => {
+    private throttledUpdated = debounce(() => {
         if (this.outputFrame === null) {
             throw new Error("Frame not ready yet.");
         }

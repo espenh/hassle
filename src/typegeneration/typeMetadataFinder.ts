@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import { difference, flatten, startsWith, trimEnd, uniq, values } from "lodash";
 import { ISwaggerResponse } from "./swagger";
 
 class UrlUtils {
@@ -7,7 +7,7 @@ class UrlUtils {
         return {
             origin: urlObject.origin,
             host: urlObject.host,
-            path: _.trimEnd(urlObject.pathname, "/")
+            path: trimEnd(urlObject.pathname, "/")
         };
     }
 }
@@ -38,14 +38,14 @@ class MetadataRepository {
 
         const urlParts = UrlUtils.get(url);
 
-        const metadataForHost = _.values(this.knownMetadataSourceUrl).find((metadata) => metadata !== null && metadata.host === urlParts.host) as ISwaggerResponse | null;
+        const metadataForHost = values(this.knownMetadataSourceUrl).find((metadata) => metadata !== null && metadata.host === urlParts.host) as ISwaggerResponse | null;
         if (metadataForHost === undefined || metadataForHost === null) {
             return null;
         }
 
         let urlPathToMatch = urlParts.path;
         // Remove basepath (thing.com/v2/horses, /v2 is the basepath, /vt/horses is the urlPathToMatch).
-        if (metadataForHost.basePath && _.startsWith(urlPathToMatch.toLowerCase(), metadataForHost.basePath.toLowerCase())) {
+        if (metadataForHost.basePath && startsWith(urlPathToMatch.toLowerCase(), metadataForHost.basePath.toLowerCase())) {
             urlPathToMatch = urlPathToMatch.substring(metadataForHost.basePath.length);
         }
 
@@ -81,8 +81,8 @@ export default class TypeMetadataFinder {
         const stringFinder = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
 
         const allStringsWithQuotes: string[] = [];
-        code.replace(stringFinder, (a, b, c, d) => {
-            allStringsWithQuotes.push(a);
+        code.replace(stringFinder, (matchingString) => {
+            allStringsWithQuotes.push(matchingString);
             return "";
         });
 
@@ -102,7 +102,7 @@ export default class TypeMetadataFinder {
         // https://apireportservice.energycorp.com/swagger/docs/v1
         // https://apireportservice.energycorp.com/reports/portfolios
 
-        const foundSwaggerEndPoints = _.uniq(_.flatten(urls.map((urlString) => {
+        const foundSwaggerEndPoints = uniq(flatten(urls.map((urlString) => {
             const url = new URL(urlString);
 
             return [
@@ -162,7 +162,7 @@ export default class TypeMetadataFinder {
             return;
         }
 
-        const unknownMetadataUrls = _.difference(metadataPoints, this.metadataRepository.getKnownUrls());
+        const unknownMetadataUrls = difference(metadataPoints, this.metadataRepository.getKnownUrls());
         const typetypetype = await this.getTypesForUrls(unknownMetadataUrls);
         typetypetype.forEach((metadataForUrl) => {
             this.metadataRepository.addMetadata(metadataForUrl.url, metadataForUrl.metadata);

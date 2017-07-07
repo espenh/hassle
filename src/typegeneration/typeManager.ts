@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import { flatten, uniq } from "lodash";
 import TypeGenerator from "./typeGenerator";
 import TypeMetadataFinder from "./typeMetadataFinder";
 
@@ -12,7 +12,7 @@ export default class TypeManager {
 
     public async processCode(code: string) {
         const fetchCalls = await this.fetcher.findMetadata(code);
-        const typedefs = _.flatten(fetchCalls.map((foundType) => {
+        const typedefs = flatten(fetchCalls.map((foundType) => {
             if (foundType.state === null) {
                 return [];
             }
@@ -20,6 +20,6 @@ export default class TypeManager {
             return TypeGenerator.generateTypesForUrl(foundType.url, foundType.state.pathDefinition, foundType.state.definitions);
         }));
 
-        return _.uniq(typedefs).join("\r\n");
+        return uniq(typedefs).join("\r\n");
     }
 }

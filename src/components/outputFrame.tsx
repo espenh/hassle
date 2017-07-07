@@ -43,8 +43,4 @@ export class OutputFrame extends React.Component<IOutputFrameProps, {}> {
         return <div className="output-container" ref={(containerElement: HTMLDivElement) => { this.containerElement = containerElement; }}>
         </div>;
     }
-
-    public componentDidMount() {
-
-    }
 }

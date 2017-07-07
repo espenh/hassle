@@ -1,6 +1,5 @@
 import { expect } from "chai";
 
-import { ISwaggerSchemaValueTypeOrReference } from "../../../src/typegeneration/swagger";
 import TypeGenerator, { ArrayOfSyntaxObjects, DefinitionTraverser, ObjectWithKnownProperties, ObjectWithUnknownKeys, SyntaxObjectPrimitiveNumber, SyntaxObjectPrimitiveString } from "../../../src/typegeneration/typeGenerator";
 
 describe("Type generator for objects", () => {

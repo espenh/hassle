@@ -1,4 +1,4 @@
-import { ISwaggerDefinitionReference, ISwaggerDefinitions, ISwaggerPathDefinition, ISwaggerSchemaValueTypeOrReference } from "./swagger";
+import { ISwaggerDefinitions, ISwaggerPathDefinition, ISwaggerSchemaValueTypeOrReference } from "./swagger";
 
 export default class TypeGenerator {
 
