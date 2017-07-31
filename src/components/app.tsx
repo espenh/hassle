@@ -24,6 +24,10 @@ import OutputOrchestrator from "../outputOrchestrator";
 import { OptionsFrame } from "./optionsFrame";
 import SaveDialog from "./saveDialog";
 
+import * as defaultSampleTypescript from "!!raw-loader!../samples/default/app.ts";
+import * as defaultSampleHtml from "!!raw-loader!../samples/default/index.html";
+import * as defaultSampleCss from "!!raw-loader!../samples/default/style.css";
+
 interface ISnackBarState {
     open: boolean;
     message?: string;
@@ -223,35 +227,9 @@ export default class HassleApp extends React.Component<{}, IHassleAppState> {
         if (!defaultCode) {
             // TODO - Import these from a folder of sample files.
             defaultCode = {
-                typescript: `const container = document.querySelector("div.container") as HTMLDivElement;
-
-document.querySelector("button").addEventListener("click", () => {
-    const newDiv = document.createElement("div");
-    newDiv.classList.add("box");
-    newDiv.style.backgroundColor = getRandomColor();
-
-    container.appendChild(newDiv);
-});
-
-const getRandomColor = () => {
-    const getRandomInteger = () => Math.round(Math.random() * 255);
-    return \`rgb(\${getRandomInteger()},\${getRandomInteger()},\${getRandomInteger()})\`;
-};
-                `,
-                css: `div.container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-div.box {
-    width: 100px;
-    height: 100px;
-    margin: 5px;
-}`,
-                html: `<button>Click</button>
-
-<div class="container">
-</div>`
+                typescript: (defaultSampleTypescript as any),
+                css: (defaultSampleCss as any),
+                html: (defaultSampleHtml as any)
             };
         }
 
