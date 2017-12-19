@@ -13,9 +13,17 @@ export interface IOutputFrameState {
 
 export class OutputFrame extends React.Component<IOutputFrameProps, {}> {
 
-    private containerElement: HTMLDivElement;
+    private containerElement: HTMLDivElement | null;
+
+    private captureContainer = (element: HTMLDivElement | null) => {
+        this.containerElement = element;
+    }
 
     public updateOutput(state: IOutputFrameState) {
+
+        if (this.containerElement === null) {
+            return;
+        }
 
         // Create iframe.
         const frame = this.containerElement.ownerDocument.createElement("iframe");
@@ -40,7 +48,7 @@ export class OutputFrame extends React.Component<IOutputFrameProps, {}> {
     }
 
     public render(): JSX.Element {
-        return <div className="output-container" ref={(containerElement: HTMLDivElement) => { this.containerElement = containerElement; }}>
+        return <div className="output-container" ref={this.captureContainer}>
         </div>;
     }
 }

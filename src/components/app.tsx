@@ -97,6 +97,12 @@ export default class HassleApp extends React.Component<{}, IHassleAppState> {
         }
     }
 
+    private captureContainer = (element: HTMLDivElement | null) => {
+        if (element !== null) {
+            this.container = element;
+        }
+    }
+
     public render() {
         const palette = getMuiTheme().palette;
         const highlightColor = palette ? palette.accent1Color : "red";
@@ -174,7 +180,7 @@ export default class HassleApp extends React.Component<{}, IHassleAppState> {
                 autoHideDuration={4000}
                 onRequestClose={() => this.setState({ snackBar: { open: false } })}
             />
-            <div className="layout-container" ref={(element: HTMLDivElement) => { this.container = element; }}></div>
+            <div className="layout-container" ref={this.captureContainer}></div>
         </div >;
     }
 
@@ -336,10 +342,12 @@ export default class HassleApp extends React.Component<{}, IHassleAppState> {
             output: outputFrameProps,
             options: optionsFrameProps
         };
-        each(allConfigs, (itemConfig: GoldenLayout.ReactComponentConfig) => {
+
+        each(allConfigs, (itemConfig) => {
             if (itemConfig.id && !(itemConfig.id instanceof Array)) {
                 if (propsForComponents.hasOwnProperty(itemConfig.id)) {
-                    itemConfig.props = propsForComponents[itemConfig.id];
+                    const reactItemConfig = itemConfig as GoldenLayout.ReactComponentConfig;
+                    reactItemConfig.props = propsForComponents[itemConfig.id];
                 }
             }
         });

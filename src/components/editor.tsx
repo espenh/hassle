@@ -21,8 +21,14 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
     private loadedLibs: { dispose: () => void }[] = [];
     private hassleGeneratedTypeLibe: { dispose(): void } | undefined;
 
+    private captureEditorContainer = (element: HTMLDivElement | null) => {
+        if (element !== null) {
+            this.editorElement = element;
+        }
+    }
+
     public render(): JSX.Element {
-        return <div className="monaco-editor" ref={(element: HTMLDivElement) => { this.editorElement = element; }}></div >;
+        return <div className="monaco-editor" ref={this.captureEditorContainer}></div >;
     }
 
     public componentDidMount() {
@@ -51,8 +57,7 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
 
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         theme: "vs-dark",
-                        model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx")),
-                        minimap: { enabled: false }
+                        model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx"))
                     });
 
                     const typeManager = new TypeManager();
@@ -80,8 +85,7 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         value: this.props.value,
                         language: this.props.language,
-                        theme: "vs-dark",
-                        minimap: { enabled: false }
+                        theme: "vs-dark"
                     });
                 }
 
