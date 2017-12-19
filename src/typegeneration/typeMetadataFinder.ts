@@ -1,4 +1,4 @@
-import { difference, flatten, startsWith, trimEnd, uniq, values } from "lodash";
+import { difference, find, flatten, fromPairs, map, startsWith, trimEnd, uniq, values } from "lodash";
 import { ISwaggerResponse } from "./swagger";
 
 class UrlUtils {
@@ -38,7 +38,10 @@ class MetadataRepository {
 
         const urlParts = UrlUtils.get(url);
 
-        const metadataForHost = values(this.knownMetadataSourceUrl).find((metadata) => metadata !== null && metadata.host === urlParts.host) as ISwaggerResponse | null;
+        const metadataForHost = find(this.knownMetadataSourceUrl, (metadata, key) => {
+            return metadata !== null && (metadata.host === urlParts.host || key.toLowerCase().includes(urlParts.host.toLowerCase()));
+        }) as ISwaggerResponse | null;
+
         if (metadataForHost === undefined || metadataForHost === null) {
             return null;
         }
@@ -49,8 +52,16 @@ class MetadataRepository {
             urlPathToMatch = urlPathToMatch.substring(metadataForHost.basePath.length);
         }
 
+        // Use lowercase and no leading / when comparing.
+        const lowerCasePaths = fromPairs(map(metadataForHost.paths, (thing, key) => {
+            const cleanKey = key.startsWith("/") ? key.substring(1) : key;
+            return [cleanKey.toLowerCase(), thing];
+        }));
+
+        const cleanUrlPath = urlPathToMatch.startsWith("/") ? urlPathToMatch.substring(1) : urlPathToMatch;
+
         return {
-            pathDefinition: metadataForHost.paths[urlPathToMatch] || null,
+            pathDefinition: lowerCasePaths[cleanUrlPath.toLowerCase()] || null,
             definitions: metadataForHost.definitions
         };
     }
