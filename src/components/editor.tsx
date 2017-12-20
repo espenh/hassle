@@ -8,7 +8,10 @@ import { IEditorParams } from "../contracts";
 // TODO - We're adding some declarations here even if the scripts are (probably) not loaded.
 // Could have an import screen where users could add scripts they want loaded (highcharts, react, lodash, jquery etc.)
 // and have d.ts files paired with those libraries.
+import * as defHighchartsMore from "!!raw-loader!@types/highcharts/highcharts-more.d.ts";
+import * as defHighstock from "!!raw-loader!@types/highcharts/highstock.d.ts";
 import * as defHighcharts from "!!raw-loader!@types/highcharts/index.d.ts";
+import * as defLodash from "!!raw-loader!@types/lodash/index.d.ts";
 import * as defReact from "!!raw-loader!@types/react/index.d.ts";
 
 import TypeManager from "../typegeneration/typeManager";
@@ -53,11 +56,17 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
 
                     // Add some known types.
                     this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defReact as any, "node_modules/@types/react/index.d.ts"));
+                    this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defLodash as any, "node_modules/@types/lodash/index.d.ts"));
                     this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defHighcharts as any, "node_modules/@types/highcharts/index.d.ts"));
+                    this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defHighstock as any, "node_modules/@types/highcharts/highstock.d.ts"));
+                    this.loadedLibs.push(monaco.languages.typescript.typescriptDefaults.addExtraLib(defHighchartsMore as any, "node_modules/@types/highcharts/highcharts-more.d.ts"));
 
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         theme: "vs-dark",
-                        model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx"))
+                        model: monaco.editor.createModel(this.props.value, "typescript", monaco.Uri.parse("file:///main.tsx")),
+                        minimap: {
+                            enabled: false
+                        }
                     });
 
                     const typeManager = new TypeManager();
@@ -85,7 +94,10 @@ export class MonacoEditor extends React.Component<IEditorParams, {}> {
                     this.editor = monaco.editor.create(this.editorElement as HTMLDivElement, {
                         value: this.props.value,
                         language: this.props.language,
-                        theme: "vs-dark"
+                        theme: "vs-dark",
+                        minimap: {
+                            enabled: false
+                        }
                     });
                 }
 
